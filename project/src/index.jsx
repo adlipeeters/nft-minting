@@ -6,11 +6,14 @@ import App from "./App";
 
 import 'swiper/css';
 import 'react-toastify/dist/ReactToastify.css';
+import { Web3ModalProvider } from "./services/blockchain";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
+  <Web3ModalProvider>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Web3ModalProvider>
 );

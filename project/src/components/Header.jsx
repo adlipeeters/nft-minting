@@ -4,19 +4,23 @@ import { Link, useLocation } from 'react-router-dom'
 import { GoThreeBars } from 'react-icons/go'
 import { AiOutlineClose } from 'react-icons/ai'
 import ConnectWalletButton from './ConnectWalletButton'
+import { useGlobalState } from '../store'
 
 const pages = [
     {
         name: 'Dashboard',
-        path: '/dashboard'
+        path: '/dashboard',
+        adminRequired: false
     },
     {
         name: 'Minting',
-        path: '/minting'
+        path: '/minting',
+        adminRequired: false
     },
     {
         name: 'Admin',
-        path: '/admin'
+        path: '/admin',
+        adminRequired: true
     },
 ]
 
@@ -27,6 +31,39 @@ const classNames = (...classes) => {
 const Header = () => {
     const [menu, setMenu] = useState(false);
     const location = useLocation()
+    const [admin] = useGlobalState('admin')
+
+    const desktopMenuItem = (page) => {
+        if (page.adminRequired && !admin) {
+            return null
+        }
+        return (
+            <li key={page.name} className={classNames(
+                location.pathname == page.path
+                    ? 'border-white'
+                    : 'border-transparent',
+                `px-4 py-2 transition-all duration-150 border-b-2 hover:border-white`)}>
+
+                <Link to={page.path}>{page.name}</Link>
+            </li>
+        )
+    }
+
+    const mobileMenuItem = (page) => {
+        if (page.adminRequired && !admin) {
+            return null
+        }
+        return (
+            <li key={page.name} className={classNames(
+                location.pathname == page.path
+                    ? 'border-white'
+                    : 'border-transparent',
+                `px-4 py-2 transition-all duration-150 border-b-2 hover:border-white`)}>
+
+                <Link to={page.path}>{page.name}</Link>
+            </li>
+        )
+    }
     return (
         <div className='bg-[#521652] text-white font-semibold'>
             <div className='py-4 px-10 flex justify-between items-center'>
@@ -37,15 +74,9 @@ const Header = () => {
 
                 {location.pathname != '/' ? (
                     <>
-                        <ul className='hidden md:flex justify-center md:w-2/5'>
+                        <ul className='hidden md:flex justify-center space-x-6 md:w-2/5'>
                             {pages.map(page => (
-                                <li key={page.name} className={classNames(
-                                    location.pathname == page.path
-                                        ? 'border-white'
-                                        : 'border-transparent',
-                                    `px-4 py-2 transition-all duration-150 border-b-2 hover:border-white`)}>
-                                    <Link to={page.path}>{page.name}</Link>
-                                </li>
+                                desktopMenuItem(page)
                             ))}
                         </ul>
                     </>
@@ -66,24 +97,12 @@ const Header = () => {
             {/* Mobile Menu */}
             {menu ? (
                 <ul className='md:hidden py-4 px-10 flex flex-col space-y-3 font-semibold mt-4 shadow-md shadow-black bg-[#6d1e6d] text-white'>
-                    {/* <li className='md:hidden'>
-                    <button onClick={() => setMenu(!menu)} className='w-full py-2 px-10 text-left'>
-                        Menu
-                    </button>
-                </li> */}
                     {pages.map(page => (
-                        <li key={page.name} className={classNames(
-                            location.pathname == page.path
-                                ? 'border-white'
-                                : 'border-transparent',
-                            `px-4 py-2 transition-all duration-150 border-b-2 hover:border-white`)}>
-                            <Link to={page.path}>{page.name}</Link>
-                        </li>
+                        mobileMenuItem(page)
                     ))}
                     <li>
                         <ConnectWalletButton />
                     </li>
-
                 </ul>
             ) : ''}
         </div>

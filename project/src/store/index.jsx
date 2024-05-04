@@ -2,6 +2,8 @@ import { createGlobalState } from 'react-hooks-global-state';
 import Withdrawal from '../components/admin/Withdrawal';
 
 const { getGlobalState, useGlobalState, setGlobalState } = createGlobalState({
+    chain: null,
+    connectedAccount: '',
     withdrawModal: 'scale-0',
     airdropModal: 'scale-0',
     airdropListModal: 'scale-0',
@@ -27,7 +29,8 @@ const { getGlobalState, useGlobalState, setGlobalState } = createGlobalState({
     prices: {
         stageOnePrice: 0,
         stageTwoPrice: 0,
-    }
+    },
+    admin: false
 });
 
 const generateWL = (numOfJoiners) => {
