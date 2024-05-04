@@ -53,9 +53,9 @@ contract DappMint is
     uint256 public stageOneCost = 0.02 ether; // the cost of minting the NFT in stage 1
     uint256 public stageTwoCost = 0.04 ether; // the cost of minting the NFT in stage 2
 
-    uint256 stageOneCount; // the number of NFTs minted in stage 1
-    uint256 stageTwoCount; // the number of NFTs minted in stage 2
-    uint256 airdropCount; // the number of NFTs minted in the airdrop
+    uint256 public stageOneCount; // the number of NFTs minted in stage 1
+    uint256 public stageTwoCount; // the number of NFTs minted in stage 2
+    uint256 public airdropCount; // the number of NFTs minted in the airdrop
 
     mapping(uint256 => NFTStruct) minted; // mapping of all NFTs that have been minted on the platform; Example: If you minted an NFT it will be stored in this mapping; Each token will have a unique ID and the NFTStruct will have the details of the NFT
     mapping(address => uint256) public totalCost; // mapping of the total cost of the NFTs that have been minted by a specific address; Example: If you minted an NFT, the total cost of the NFTs that you minted will be stored in this mapping

@@ -6,7 +6,8 @@ import MintField from '../components/minting/MintField'
 const Minting = () => {
   const [maximums] = useGlobalState('maximums')
   const [statuses] = useGlobalState('statuses')
-  const myCollection = generateNFTs(7);
+  const [myCollection] = useGlobalState('myCollection')
+  // const myCollection = generateNFTs(7);
   return (
     <>
       <div className='h-[10vh] sm:h-[20vh] bg-[#6d1e6d]'></div>

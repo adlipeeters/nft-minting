@@ -30,7 +30,11 @@ const { getGlobalState, useGlobalState, setGlobalState } = createGlobalState({
         stageOnePrice: 0,
         stageTwoPrice: 0,
     },
-    admin: false
+    admin: false,
+    airdrops: [],
+    collections: [],
+    myCollection: [],
+    myTotalCost: 0,
 });
 
 const generateWL = (numOfJoiners) => {

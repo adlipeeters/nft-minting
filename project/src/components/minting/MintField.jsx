@@ -1,5 +1,6 @@
 import React from 'react'
 import { toast } from 'react-toastify'
+import { performMinting } from '../../services/blockchain'
 
 const MintField = ({ title, stage, stageCount, stageMax, stopped }) => {
     const [numOfMint, setNumOfMint] = React.useState('')
@@ -14,9 +15,12 @@ const MintField = ({ title, stage, stageCount, stageMax, stopped }) => {
 
         await toast.promise(
             new Promise(async (resolve, reject) => {
-                setTimeout(() => {
-                    resolve('NFTs minted successfully')
-                }, 3000)
+                await performMinting(numOfMint, stage)
+                    .then(() => {
+                        setNumOfMint('')
+                        resolve()
+                    })
+                    .catch(() => reject())
             }),
             {
                 pending: 'Minting NFTs...',

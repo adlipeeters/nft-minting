@@ -1,4 +1,6 @@
 import React from 'react'
+import { toast } from 'react-toastify'
+import { changePrice } from '../../services/blockchain'
 
 const PriceField = ({ stage, currPrice }) => {
     const [price, setPrice] = React.useState('')
@@ -7,14 +9,18 @@ const PriceField = ({ stage, currPrice }) => {
         e.preventDefault()
         await toast.promise(
             new Promise(async (resolve, reject) => {
-                setTimeout(() => {
-                    resolve('NFTs minted successfully')
-                }, 3000)
+                console.log(price)
+                await changePrice(price, stage)
+                    .then(() => {
+                        setPrice('')
+                        resolve()
+                    })
+                    .catch(() => reject())
             }),
             {
-                pending: 'Minting NFTs...',
-                success: 'NFTs minted successfully',
-                error: 'Failed to mint NFTs'
+                pending: 'Updating...',
+                success: 'Minting price updated successfully',
+                error: 'Failed to update minting price'
             }
         )
     }
@@ -26,11 +32,12 @@ const PriceField = ({ stage, currPrice }) => {
                 <input
                     type='number'
                     className='block flex-1 mb-4 sm:mb-0 sm:w-2/3 text-sm text-slate-500 bg-transparent border-gray-100 focus:outline-none focus:border-[#6d1e6d] focus:ring-0 rounded-lg'
-                    min={1}
-                    max={4}
+                    min={0.01}
+                    step={0.01}
+                    // max={4}
                     maxLength={1}
                     name='price'
-                    placeholder={`Current Pprice ${currPrice}`}
+                    placeholder={`Current Price ${currPrice} ETH`}
                     required
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
