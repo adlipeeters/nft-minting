@@ -4106,7 +4106,7 @@
     "@walletconnect/ethereum-provider" "2.11.2"
     "@walletconnect/modal" "2.6.2"
 
-"@wagmi/core@2.9.1":
+"@wagmi/core@2.9.1", "@wagmi/core@^2.9.1":
   version "2.9.1"
   resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-2.9.1.tgz#e1cb60106766ca14778cf795795c7c71644f7ca0"
   integrity sha512-VUILlj0qFmZEa9XpNsYhIaQe3jsJdFGSRSbn+xsvGBo+yZpNxQXuaLo3+ntuv1kTFdw8Qzk17fLGy2U9a0XFdA==

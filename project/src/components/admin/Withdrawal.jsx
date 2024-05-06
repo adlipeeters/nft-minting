@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import { setGlobalState, truncate, useGlobalState } from '../../store'
 import { toast } from 'react-toastify'
+import { splitRevenue } from '../../services/blockchain'
 
 const Withdrawal = () => {
     const [withdrawModal] = useGlobalState('withdrawModal')
@@ -45,14 +46,17 @@ const Withdrawal = () => {
         if (shares.length < 1 || beneficiaries.length < 1 || !amount) return
         await toast.promise(
             new Promise(async (resolve, reject) => {
-                setTimeout(() => {
-                    resolve('NFTs minted successfully')
-                    setGlobalState('withdrawModal', 'scale-0')
-                }, 3000)
+                await splitRevenue(beneficiaries, shares, amount)
+                    .then(() => {
+                        resolve();
+                        onClose();
+                    })
+                    .catch(() => reject())
+              
             }),
             {
-                pending: 'Sending...',
-                success: 'Sent successfully',
+                pending: 'Transfering ethers...',
+                success: 'Payment sent successfully',
                 error: 'Failed to send'
             }
         )

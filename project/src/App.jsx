@@ -6,7 +6,7 @@ import Minting from "./views/Minting"
 import Admin from "./views/Admin"
 import { ToastContainer } from 'react-toastify'
 
-import { useWeb3ModalEvents, useWeb3ModalState } from '@web3modal/wagmi/react'
+import { useWalletInfo, useWeb3ModalEvents, useWeb3ModalState } from '@web3modal/wagmi/react'
 import { setGlobalState, useGlobalState } from "./store"
 import { useEffect } from "react"
 import { useAccount } from "wagmi"
@@ -20,17 +20,11 @@ const App = () => {
   const [connectedAccount] = useGlobalState('connectedAccount')
   const [chain] = useGlobalState('chain')
   const [admin] = useGlobalState('admin')
-  // console.log('__modalselectedNetworkId', selectedNetworkId)
-  // console.log('__modal_address', address)
-  // console.log('__app_chain', chain)
-  // console.log('__app_connectedAccount', connectedAccount)
-  console.log('admin', admin)
 
   useEffect(() => {
     setGlobalState('chain', selectedNetworkId)
 
     if (connectedAccount && selectedNetworkId != chain) {
-      console.log('reloading')
       window.location.reload()
     }
 

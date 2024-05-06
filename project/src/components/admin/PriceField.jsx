@@ -9,7 +9,6 @@ const PriceField = ({ stage, currPrice }) => {
         e.preventDefault()
         await toast.promise(
             new Promise(async (resolve, reject) => {
-                console.log(price)
                 await changePrice(price, stage)
                     .then(() => {
                         setPrice('')

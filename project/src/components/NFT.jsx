@@ -1,8 +1,11 @@
 import React from 'react'
 import { BiLinkExternal } from 'react-icons/bi'
-import {truncate} from '../store'
+import { truncate, useGlobalState } from '../store'
+import { address } from '../services/blockchain'
 
 const NFT = ({ nft, symbol }) => {
+    const [chain] = useGlobalState('chain')
+    // console.log(chain)
     const formatTimestamp = (timestamp) => {
         const date = new Date(timestamp)
         const options = {
@@ -29,7 +32,8 @@ const NFT = ({ nft, symbol }) => {
                     <span className='text-xs text-gray-500'>{formatTimestamp(nft.timestamp)}</span>
                 </div>
                 <a
-                    href={`https://testnets.opensea.io/assets/CHAIN/ADDRESS/` + nft.id}
+                    // href={`https://testnets.opensea.io/assets/${chain.network}/${address}/` + nft.id}
+                    href={`https://testnets.opensea.io/assets/${'hardhat'}/${address}/` + nft.id}
                     target='_blank'
                     rel='noreferrer noopener'
                     className='flex items-center justify-start space-x-2 text-xs font-semibold text-gray-500'>

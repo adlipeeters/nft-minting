@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import { setGlobalState, truncate, useGlobalState } from '../../store'
 import { toast } from 'react-toastify'
+import { performAirdrop } from '../../services/blockchain'
 
 const Airdrop = () => {
     const [airdropModal] = useGlobalState('airdropModal')
@@ -40,10 +41,13 @@ const Airdrop = () => {
 
         await toast.promise(
             new Promise(async (resolve, reject) => {
-                setTimeout(() => {
-                    resolve('NFTs minted successfully')
-                    setGlobalState('airdropModal', 'scale-0')
-                }, 3000)
+                await performAirdrop(beneficiaries, tokens)
+                    .then(() => {
+                        resolve();
+                        onClose();
+                    })
+                    .catch(() => reject())
+
             }),
             {
                 pending: 'Airdropping...',
@@ -87,7 +91,7 @@ const Airdrop = () => {
                             step={1}
                             min={1}
                             placeholder={`Tokens e.g. 2`}
-                            
+
                             value={numberOfTokens}
                             onChange={(e) => setNumberOfTokens(e.target.value)}
                         />

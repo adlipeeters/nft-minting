@@ -6,7 +6,8 @@ import { toast } from 'react-toastify'
 
 const AirdropList = () => {
     const [airdropListModal] = useGlobalState('airdropListModal')
-    const airdroppers = generateAirdropList(15)
+    const [airdrops] = useGlobalState('airdrops')
+    // const airdroppers = generateAirdropList(15)
 
     const onClose = () => {
         setGlobalState('airdropListModal', 'scale-0')
@@ -26,17 +27,17 @@ const AirdropList = () => {
                         </button>
                     </div>
                     <div className='max-h-[400px] overflow-y-auto'>
-                        {airdroppers.map((airdropper, i) => (
+                        {airdrops.map((airdropper, i) => (
                             <div
                                 key={i}
                                 className='flex justify-between items-center mt-5'>
                                 <div className='flex justify-start items-center space-x-2'>
                                     <Identicon
-                                        string={airdropper.owner}
+                                        string={airdropper.beneficiary}
                                         size={25}
                                         className="bg-white rounded-full shadow-md"
                                     />
-                                    <span className='text-xs font-medium'>{truncate(airdropper.owner, 4, 4, 11)}</span>
+                                    <span className='text-xs font-medium'>{truncate(airdropper.beneficiary, 4, 4, 11)}</span>
                                 </div>
 
                                 <div className='rounded-full text-gray-500 bg-gray-200 font-semibold p-1.5 px-3 text-xs'>

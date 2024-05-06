@@ -116,6 +116,55 @@ const changePrice = async (newCost, stage) => {
     }
 }
 
+const splitRevenue = async (beneficiaries, percentages, amount) => {
+    try {
+        if (!ethereum) return alert('Please install metamask');
+        const connectedAccount = getGlobalState('connectedAccount');
+        const contract = await getEthereumContract();
+
+        const tx = await contract.withdrawTo(beneficiaries, percentages, toWei(amount), {
+            from: connectedAccount,
+        });
+        await tx.wait();
+        await getData();
+    } catch (error) {
+        reportErrors(error)
+    }
+}
+
+const performAirdrop = async (beneficiaries, tokens) => {
+    try {
+        if (!ethereum) return alert('Please install metamask');
+        const connectedAccount = getGlobalState('connectedAccount');
+        const contract = await getEthereumContract();
+
+        const tx = await contract.airDropTo(beneficiaries, tokens, {
+            from: connectedAccount,
+        });
+        await tx.wait();
+        await getData();
+    } catch (error) {
+        reportErrors(error)
+    }
+}
+
+const joinWL = async () => {
+    try {
+        if (!ethereum) return alert('Please install metamask');
+        const connectedAccount = getGlobalState('connectedAccount');
+        const contract = await getEthereumContract();
+
+        const tx = await contract.joinWhitelist({
+            from: connectedAccount,
+        });
+        await tx.wait();
+        // await getData();
+        await getWL();
+    } catch (error) {
+        reportErrors(error)
+    }
+}
+
 const getAdmin = async () => {
     try {
         if (!ethereum) return alert('Please install metamask');
@@ -125,12 +174,24 @@ const getAdmin = async () => {
         const admin = await contract.owner();
         const stageOnePaused = await contract.stageOnePaused();
         const stageTwoPaused = await contract.stageTwoPaused();
+        const airdroppers = await contract.getAirdroppers();
         // * Set global state
         setGlobalState('admin', connectedAccount == admin.toLowerCase());
         setGlobalState('statuses', { stageOnePaused, stageTwoPaused });
+        setGlobalState('airdrops', structuredAirdrops(airdroppers));
     } catch (error) {
         reportErrors(error)
     }
+}
+
+const getWL = async () => {
+    if (!ethereum) return alert('Please install metamask');
+    const contract = await getEthereumContract();
+    const whitelist = await contract.getWhitelist();
+    if (!Array.isArray(whitelist) || !whitelist || whitelist == 'undefined') {
+        whitelist = [];
+    }
+    setGlobalState('whiteList', structureWL(whitelist));
 }
 
 const getStats = async () => {
@@ -191,6 +252,7 @@ const getMyNFTs = async () => {
 }
 
 const getData = async () => {
+    await getWL();
     await getAdmin();
     await getStats();
     await getRecentNFTs();
@@ -209,12 +271,25 @@ const structuredNFTs = (nfts) => {
     }).reverse();
 }
 
+const structuredAirdrops = (airdrops) => {
+    return airdrops.map((airdrop) => {
+        return {
+            tokens: airdrop.tokens.toNumber(),
+            beneficiary: airdrop.beneficiary.toLowerCase(),
+        }
+    }).reverse();
+}
+
+const structureWL = (wls) => {
+    return wls.map((wl) => wl.toLowerCase()).reverse();
+}
+
 const reportErrors = (error) => {
     console.log(error)
     throw new Error('No ethereum object')
 }
 
-export { getData, switchMinting, performMinting, changePrice }
+export { ContractAddress as address, getData, switchMinting, performMinting, changePrice, splitRevenue, performAirdrop, joinWL }
 
 export function Web3ModalProvider({ children }) {
     return (

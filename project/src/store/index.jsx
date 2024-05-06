@@ -8,8 +8,6 @@ const { getGlobalState, useGlobalState, setGlobalState } = createGlobalState({
     airdropModal: 'scale-0',
     airdropListModal: 'scale-0',
     whiteList: [],
-    myTotalCost: 13,
-    airdrops: [],
     maximums: {
         stageOneMax: 0,
         stageTwoMax: 0,
